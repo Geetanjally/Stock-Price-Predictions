@@ -1,159 +1,155 @@
-# Trader Performance vs Market Sentiment
+# 📊 Trader Performance vs Market Sentiment Analysis
 
-## Objective
+## 🚀 Live Interactive Dashboard
 
-This project analyzes how Bitcoin market sentiment (Fear vs Greed) influences trader behavior and performance on Hyperliquid.
-
-The goal is to uncover measurable behavioral patterns and derive actionable strategy insights that can inform smarter trading decisions.
+🔗 **[https://geetanjally-stock-price-predictions-main-barkiy.streamlit.app/](https://geetanjally-stock-price-predictions-main-barkiy.streamlit.app/)**
 
 ---
 
-## Datasets Used
+## 🎯 Project Objective
 
-### 1. Bitcoin Market Sentiment (Fear/Greed Index)
+This project analyzes how Bitcoin market sentiment (Fear vs Greed) influences trader behavior and performance.
 
-* Columns: `date`, `classification`
-* Daily sentiment label (Fear / Greed)
-
-### 2. Hyperliquid Historical Trader Data
-
-* Trade-level execution data
-* Key fields:
-
-  * `Account`
-  * `Execution Price`
-  * `Size USD`
-  * `Side`
-  * `Timestamp IST`
-  * `Closed PnL`
-  * `Leverage` (if applicable)
+The goal is to identify measurable behavioral patterns and translate them into actionable trading strategy insights.
 
 ---
 
-## Part A — Data Preparation
+## 📂 Datasets Used
 
-### Data Cleaning
+### 1️⃣ Bitcoin Market Sentiment (Fear/Greed Index)
 
-* Removed duplicate trade records
-* Checked and documented missing values
-* Standardized timestamp formats
-* Converted timestamps to `datetime64[ns]`
-* Normalized trades to daily granularity
-* Merged trade data with sentiment data on date
+* `date`
+* `classification` (Fear / Greed)
 
-### Feature Engineering
+### 2️⃣ Historical Trader Data
 
-Constructed key analytical metrics:
+Trade-level execution records including:
 
-* Daily PnL per trader
-* Win rate (Closed PnL > 0)
-* Average trade size
-* Trade frequency per day
-* Long/Short ratio
-* Volatility proxy (standard deviation of daily PnL)
-* Trader segmentation (behavior-based grouping)
+* Account
+* Execution Price
+* Size USD
+* Side (Long/Short)
+* Timestamp
+* Closed PnL
+* Leverage
 
 ---
 
-## Part B — Analysis
+## 🧹 Data Preparation
 
-### 1. Performance Across Sentiment Regimes
+### ✔ Data Cleaning
 
-* Average PnL tends to increase during Greed regimes.
-* Win rate improves moderately in Greed periods.
-* However, PnL volatility also increases significantly.
+* Removed duplicates
+* Handled missing values
+* Standardized datetime formats
+* Converted timestamps to daily level
+* Aligned both datasets on `date`
 
-**Interpretation:**
-Greed increases capital deployment and risk-taking behavior, leading to higher dispersion in outcomes rather than consistently improved profitability.
+### ✔ Feature Engineering
 
----
+Created analytical features:
 
-### 2. Behavioral Changes Under Sentiment Shifts
-
-Observed changes during Greed regimes:
-
-* Increased trade frequency
-* Larger average position sizes
-* Stronger long bias
-* Expanded risk exposure
-
-**Conclusion:**
-Market sentiment influences trader behavior more strongly than it influences pure profitability.
+* 📈 Daily PnL per trader
+* ✅ Win rate
+* 💰 Average trade size
+* 🔁 Trade frequency
+* ⚖️ Long/Short ratio
+* 📊 PnL volatility (std deviation)
+* 🎯 Behavioral segments
 
 ---
 
-### 3. Trader Segmentation Insights
+## 📊 Exploratory Analysis
 
-Traders were segmented into:
+### 🔹 Sentiment vs Performance
 
-* High-frequency vs Low-frequency traders
-* High-risk vs Low-risk traders
+* Greed days show higher average PnL
+* Win rate slightly improves during Greed
+* Volatility increases significantly
+
+👉 Sentiment amplifies risk-taking behavior rather than guaranteeing profitability.
+
+---
+
+### 🔹 Behavioral Shifts
+
+During Greed regimes:
+
+* Trade frequency increases
+* Position sizes increase
+* Long bias strengthens
+* Risk exposure expands
+
+---
+
+### 🔹 Trader Segmentation
+
+Traders segmented into:
+
+* High vs Low leverage
+* High vs Low frequency
 * Consistent vs Inconsistent performers
 
-Key observation:
-High-frequency traders exhibit more stable performance across regimes, while low-frequency traders display higher volatility during sentiment extremes.
+High-frequency traders display more stable returns across sentiment regimes.
 
 ---
 
-## Bonus — Predictive Modeling
+## 🤖 Predictive Modeling
 
-A logistic regression model was implemented to predict trade profitability (Win/Loss) using:
+A **Random Forest Classifier** was used to predict trade profitability (Win = 1, Loss = 0).
+
+### 🔎 Features Used:
 
 * Sentiment classification
-* Position size
-* Behavioral features
+* Trade size
+* Trade frequency
+* Leverage
+* Long/Short indicator
 
-Findings indicate:
+### 📌 Why Random Forest?
 
-* Sentiment contributes to probability shifts in trade outcomes.
-* Position sizing plays a stronger role in determining variance of returns.
+* Captures nonlinear relationships
+* Handles mixed feature types
+* Robust to noise
+* Provides feature importance
 
-This confirms that sentiment impacts risk behavior more than deterministic profitability.
+### 📊 Model Insights:
 
----
-
-## Strategy Recommendations
-
-### Strategy 1: Controlled Expansion During Greed
-
-Increase trade frequency during Greed regimes, but cap position size growth to control volatility amplification.
-
-### Strategy 2: Systematic Execution During High Sentiment
-
-Adopt rule-based execution rather than discretionary leverage expansion during sentiment extremes.
+* Trade size and leverage were strong predictors
+* Sentiment influenced behavior-based features
+* Model performance indicates profitability is multi-factor driven
 
 ---
 
-## Key Takeaways
+## 💡 Strategy Recommendations
 
-* Sentiment affects trader behavior more than raw profitability.
-* Greed regimes increase both returns and volatility.
-* Risk-adjusted thinking is critical during sentiment-driven expansions.
-* Behavioral segmentation provides stronger insight than aggregate metrics.
+### 📌 Strategy 1 — Controlled Risk in Greed Regimes
+
+Increase trade participation during Greed but cap leverage expansion.
+
+### 📌 Strategy 2 — Volatility-Aware Position Sizing
+
+Reduce position sizes during Fear to stabilize drawdowns.
 
 ---
 
-## How to Run
+## ⚙️ How to Run
 
-### Option 1 — Jupyter Notebook
+### Notebook:
 
-Open:
-
-```
-assignment.ipynb
+```bash
+jupyter notebook assignment.ipynb
 ```
 
-### Option 2 — Streamlit Dashboard
+### Streamlit App:
 
-Run:
-
-```
+```bash
 streamlit run main.py
 ```
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 * Python
 * Pandas
@@ -162,17 +158,3 @@ streamlit run main.py
 * Seaborn
 * Scikit-learn
 * Streamlit
-
----
-
-## Methodology Summary
-
-1. Data cleaning and validation
-2. Daily time alignment and merging
-3. Feature engineering
-4. Regime-based comparison
-5. Trader segmentation
-6. Predictive modeling
-7. Strategy formulation
-
----
