@@ -49,6 +49,9 @@ def train_rf_model(_X, _y):
 def prepare_ml_data(_df):
     """Prepare features for ML; df argument is prefixed with underscore to avoid hashing error"""
     X_data = _df.copy()
+    
+    # Fill NaN values in Closed PnL first (replace with 0)
+    X_data['Closed PnL'] = X_data['Closed PnL'].fillna(0)
     X_data['target'] = (X_data['Closed PnL'] > 0).astype(int)
     
     # Feature engineering
@@ -63,7 +66,12 @@ def prepare_ml_data(_df):
                        'sentiment_encoded', 'side_encoded', 'trader_category']
     
     X = X_data[feature_columns].fillna(0)
-    y = X_data['target']
+    y = X_data['target'].fillna(0).astype(int)
+    
+    # Remove any rows where y is not binary (shouldn't happen but safety check)
+    valid_mask = y.isin([0, 1])
+    X = X[valid_mask]
+    y = y[valid_mask]
     
     return X, y, feature_columns, X_data
 
@@ -244,11 +252,21 @@ with tab2:
     # Model metrics
     from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
     
-    acc = accuracy_score(y, y_pred)
-    prec = precision_score(y, y_pred)
-    rec = recall_score(y, y_pred)
-    f1 = f1_score(y, y_pred)
-    auc = roc_auc_score(y, y_pred_proba)
+    # Ensure y and y_pred are both clean binary arrays
+    y_clean = y.values.flatten() if hasattr(y, 'values') else y
+    y_pred_clean = y_pred.flatten() if hasattr(y_pred, 'shape') else y_pred
+    
+    # Remove any invalid entries
+    valid_mask = np.isin(y_clean, [0, 1]) & np.isin(y_pred_clean, [0, 1])
+    y_clean = y_clean[valid_mask]
+    y_pred_clean = y_pred_clean[valid_mask]
+    y_pred_proba_clean = y_pred_proba[valid_mask]
+    
+    acc = accuracy_score(y_clean, y_pred_clean)
+    prec = precision_score(y_clean, y_pred_clean) if len(np.unique(y_clean)) > 1 else 0.0
+    rec = recall_score(y_clean, y_pred_clean) if len(np.unique(y_clean)) > 1 else 0.0
+    f1 = f1_score(y_clean, y_pred_clean) if len(np.unique(y_clean)) > 1 else 0.0
+    auc = roc_auc_score(y_clean, y_pred_proba_clean) if len(np.unique(y_clean)) > 1 else 0.5
     
     st.subheader("1️⃣ Model Performance Metrics")
     
